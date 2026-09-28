@@ -1,5 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme (dark).
+         Vazio de proposito: os atributos globais ficam em Theme.SupportFlow
+         (definido apenas em values/), que continua valendo no modo escuro,
+         enquanto as cores sao sobrepostas por values-night/colors.xml. -->
     <style name="Base.Theme.SupportFlow" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->

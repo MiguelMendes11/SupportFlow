@@ -15,51 +15,57 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_header"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingTop="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="4dp"
-            android:gravity="center_vertical">
+            android:paddingBottom="16dp">
 
             <ImageView
                 android:id="@+id/ivLogo"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_icon_tile"
                 android:contentDescription="@string/cd_logo"
+                android:padding="6dp"
                 android:src="@drawable/ic_chamado"
-                app:tint="@color/primary" />
+                app:tint="@color/text_on_navy" />
 
-            <TextView
-                android:id="@+id/tvTituloApp"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="@string/app_name"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTituloApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/app_name"
+                    android:textColor="@color/text_on_navy"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tvSubtitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/subtitulo_lista"
+                    android:textColor="@color/text_on_navy_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <Space
             android:id="@+id/spaceHeader"
             android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <TextView
-            android:id="@+id/tvSubtitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/subtitulo_lista"
-            android:textColor="@color/on_surface_secondary"
-            android:textSize="14sp" />
-
-        <Space
-            android:id="@+id/spaceList"
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:layout_height="12dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerChamados"
@@ -67,8 +73,16 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="8dp"
+            android:paddingStart="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="16dp"
             tools:listitem="@layout/item_chamado" />
+
+        <Space
+            android:id="@+id/spaceList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
     </LinearLayout>
 
     <TextView
@@ -77,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/lista_vazia"
-        android:textColor="@color/on_surface_secondary"
+        android:textColor="@color/text_secondary"
         android:textSize="16sp"
         android:visibility="gone"
         tools:visibility="visible" />
