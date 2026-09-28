@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary">#1565C0</color>
+    <color name="on_surface_secondary">#5E5E5E</color>
+
+    <color name="prioridade_alta">#E53935</color>
+    <color name="prioridade_media">#FB8C00</color>
+    <color name="prioridade_baixa">#2E7D32</color>
+
+    <color name="status_pendente">#8E24AA</color>
+    <color name="status_em_andamento">#1E88E5</color>
+    <color name="status_concluido">#43A047</color>
+</resources>

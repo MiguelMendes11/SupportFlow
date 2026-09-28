@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SupportFlow</string>
+    <string name="subtitulo_lista">Chamados de suporte</string>
+    <string name="lista_vazia">Nenhum chamado encontrado</string>
+    <string name="detalhe_titulo">Detalhes do chamado</string>
+    <string name="label_cliente">Cliente</string>
+    <string name="label_descricao">Descrição</string>
+    <string name="label_prioridade">Prioridade</string>
+    <string name="label_status">Status</string>
+    <string name="sem_descricao">Sem descrição</string>
+    <string name="voltar">Voltar</string>
+    <string name="cd_logo">Ícone do SupportFlow</string>
+    <string name="cd_voltar">Voltar para a lista de chamados</string>
+</resources>
