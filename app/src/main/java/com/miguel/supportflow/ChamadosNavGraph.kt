@@ -22,13 +22,13 @@ object ChamadosRoutes {
 @Composable
 fun ChamadosNavGraph() {
     val navController = rememberNavController()
+    val viewModel: ChamadosViewModel = viewModel()
 
     NavHost(
         navController = navController,
         startDestination = ChamadosRoutes.LISTA
     ) {
         composable(ChamadosRoutes.LISTA) {
-            val viewModel: ChamadosViewModel = viewModel()
             val chamados by viewModel.chamados.collectAsState()
 
             ListaChamadosScreen(
@@ -52,7 +52,6 @@ fun ChamadosNavGraph() {
         ) { backStackEntry ->
             val chamadoId =
                 backStackEntry.arguments?.getInt(ChamadosRoutes.ARG_CHAMADO_ID)
-            val viewModel: ChamadosViewModel = viewModel()
             val chamados by viewModel.chamados.collectAsState()
 
             DetalheChamadoScreen(
@@ -63,7 +62,15 @@ fun ChamadosNavGraph() {
 
         composable(ChamadosRoutes.FORMULARIO) {
             FormularioChamadoScreen(
-                onVoltarClick = { navController.popBackStack() }
+                onVoltarClick = { navController.popBackStack() },
+                onSalvar = { chamado ->
+                    viewModel.salvar(chamado) {
+                        navController.popBackStack(
+                            route = ChamadosRoutes.LISTA,
+                            inclusive = false
+                        )
+                    }
+                }
             )
         }
     }
