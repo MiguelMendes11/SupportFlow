@@ -11,4 +11,6 @@
     <string name="voltar">Voltar</string>
     <string name="cd_logo">Ícone do SupportFlow</string>
     <string name="cd_voltar">Voltar para a lista de chamados</string>
+    <string name="novo_chamado">Novo chamado</string>
+    <string name="lista_vazia_subtitulo">Toque no botão Novo chamado para criar o primeiro chamado.</string>
 </resources>
