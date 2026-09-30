@@ -38,7 +38,7 @@ O projeto também mantém a implementação em Android Views/XML correspondente 
 - StateFlow e Kotlin Coroutines;
 - Room (2.8.5) com KSP;
 - Lifecycle Runtime Compose (coleta de estado com `collectAsStateWithLifecycle`);
-- ViewBinding, RecyclerView e ConstraintLayout, referentes à etapa Android Views/XML.
+- ViewBinding e RecyclerView, referentes à etapa Android Views/XML.
 
 ## Arquitetura e organização
 
@@ -72,7 +72,10 @@ Requisitos verificados no projeto:
 | Kotlin | 2.2.10 |
 | compileSdk / targetSdk | 37 |
 | minSdk | 24 |
-| JDK | 17 |
+| JDK do Gradle Daemon (`gradle/gradle-daemon-jvm.properties`) | 25 (`toolchainVersion=25`, baixado automaticamente via Foojay) |
+| Compatibilidade Java do módulo `app` (`sourceCompatibility`/`targetCompatibility`) | 11 |
+
+O Gradle provisiona sozinho o JDK 25 definido em `gradle/gradle-daemon-jvm.properties` (o resolver do Foojay já está configurado em `settings.gradle.kts`); não é preciso instalar um JDK manualmente. O código do módulo `app` é compilado com compatibilidade Java 11, definida em `app/build.gradle.kts`.
 
 ## Fluxo principal
 
@@ -90,7 +93,7 @@ Os dados são armazenados localmente pelo Room e permanecem após reiniciar o ap
 
 **Etapa 1 — Android Views/XML**
 
-Implementação com layouts XML, RecyclerView, Intent explícita entre `MainActivity` e `DetalheActivity`, ViewBinding e dados iniciais em mock. Essa implementação continua no projeto, junto com os arquivos de mock da primeira versão.
+Implementação com layouts XML, RecyclerView, Intent explícita entre `MainActivity` e `DetalheActivity`, ViewBinding e dados simulados (mock). A `MainActivity` carrega a lista diretamente de `ChamadosMock`, sem acessar o Room. Essa implementação continua presente no projeto.
 
 **Etapa 2 — Jetpack Compose**
 
