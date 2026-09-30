@@ -4,74 +4,79 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import kotlinx.serialization.Serializable
 
-object ChamadosRoutes {
-    const val LISTA = "lista"
-    const val DETALHE = "detalhe/{chamadoId}"
-    const val FORMULARIO = "formulario"
-    const val ARG_CHAMADO_ID = "chamadoId"
+@Serializable
+sealed interface ChamadosNavKey : NavKey {
 
-    fun detalhe(chamadoId: Int): String = "detalhe/$chamadoId"
+    @Serializable
+    data object Lista : ChamadosNavKey
+
+    @Serializable
+    data object Formulario : ChamadosNavKey
+
+    @Serializable
+    data class Detalhe(val chamadoId: Int) : ChamadosNavKey
 }
 
 @Composable
 fun ChamadosNavGraph() {
-    val navController = rememberNavController()
+    val backStack = rememberNavBackStack(ChamadosNavKey.Lista)
     val viewModel: ChamadosViewModel = viewModel()
 
-    NavHost(
-        navController = navController,
-        startDestination = ChamadosRoutes.LISTA
-    ) {
-        composable(ChamadosRoutes.LISTA) {
-            val chamados by viewModel.chamados.collectAsState()
+    NavDisplay(
+        backStack = backStack,
+        onBack = { backStack.removerUltimo() },
+        entryProvider = entryProvider {
+            entry<ChamadosNavKey.Lista> {
+                val chamados by viewModel.chamados.collectAsState()
 
-            ListaChamadosScreen(
-                chamados = chamados,
-                onChamadoClick = { chamado ->
-                    navController.navigate(ChamadosRoutes.detalhe(chamado.id))
-                },
-                onNovoChamadoClick = {
-                    navController.navigate(ChamadosRoutes.FORMULARIO)
-                }
-            )
-        }
-
-        composable(
-            route = ChamadosRoutes.DETALHE,
-            arguments = listOf(
-                navArgument(ChamadosRoutes.ARG_CHAMADO_ID) {
-                    type = NavType.IntType
-                }
-            )
-        ) { backStackEntry ->
-            val chamadoId =
-                backStackEntry.arguments?.getInt(ChamadosRoutes.ARG_CHAMADO_ID)
-            val chamados by viewModel.chamados.collectAsState()
-
-            DetalheChamadoScreen(
-                chamado = chamados.find { it.id == chamadoId },
-                onVoltarClick = { navController.popBackStack() }
-            )
-        }
-
-        composable(ChamadosRoutes.FORMULARIO) {
-            FormularioChamadoScreen(
-                onVoltarClick = { navController.popBackStack() },
-                onSalvar = { chamado ->
-                    viewModel.salvar(chamado) {
-                        navController.popBackStack(
-                            route = ChamadosRoutes.LISTA,
-                            inclusive = false
-                        )
+                ListaChamadosScreen(
+                    chamados = chamados,
+                    onChamadoClick = { chamado ->
+                        backStack.add(ChamadosNavKey.Detalhe(chamado.id))
+                    },
+                    onNovoChamadoClick = {
+                        backStack.add(ChamadosNavKey.Formulario)
                     }
-                }
-            )
+                )
+            }
+
+            entry<ChamadosNavKey.Detalhe> { chave ->
+                val chamados by viewModel.chamados.collectAsState()
+
+                DetalheChamadoScreen(
+                    chamado = chamados.find { it.id == chave.chamadoId },
+                    onVoltarClick = { backStack.removerUltimo() }
+                )
+            }
+
+            entry<ChamadosNavKey.Formulario> {
+                FormularioChamadoScreen(
+                    onVoltarClick = { backStack.removerUltimo() },
+                    onSalvar = { chamado ->
+                        viewModel.salvar(chamado) {
+                            backStack.voltarParaLista()
+                        }
+                    }
+                )
+            }
         }
+    )
+}
+
+private fun MutableList<NavKey>.removerUltimo() {
+    if (size > 1) {
+        removeAt(lastIndex)
+    }
+}
+
+private fun MutableList<NavKey>.voltarParaLista() {
+    while (size > 1 && last() !is ChamadosNavKey.Lista) {
+        removeAt(lastIndex)
     }
 }
