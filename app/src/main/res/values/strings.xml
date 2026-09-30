@@ -3,7 +3,11 @@
     <string name="subtitulo_lista">Chamados de suporte</string>
     <string name="lista_vazia">Nenhum chamado encontrado</string>
     <string name="detalhe_titulo">Detalhes do chamado</string>
+    <string name="label_titulo">Título</string>
     <string name="label_cliente">Cliente</string>
+    <string name="erro_titulo_obrigatorio">Informe o título do chamado.</string>
+    <string name="erro_cliente_obrigatorio">Informe o nome do cliente.</string>
+    <string name="salvar_chamado">Salvar chamado</string>
     <string name="label_descricao">Descrição</string>
     <string name="label_prioridade">Prioridade</string>
     <string name="label_status">Status</string>

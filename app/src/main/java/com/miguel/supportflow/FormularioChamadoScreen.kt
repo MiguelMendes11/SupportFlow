@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -53,7 +55,14 @@ fun FormularioChamadoScreen(
     var prioridade by rememberSaveable { mutableStateOf(Prioridade.MEDIA) }
     var status by rememberSaveable { mutableStateOf(Status.PENDENTE) }
 
+    var tituloTocado by rememberSaveable { mutableStateOf(false) }
+    var clienteTocado by rememberSaveable { mutableStateOf(false) }
+    var tituloRecebeuFoco by rememberSaveable { mutableStateOf(false) }
+    var clienteRecebeuFoco by rememberSaveable { mutableStateOf(false) }
+
     val podeSalvar = titulo.isNotBlank() && cliente.isNotBlank()
+    val mostrarErroTitulo = tituloTocado && titulo.isBlank()
+    val mostrarErroCliente = clienteTocado && cliente.isBlank()
 
     Column(
         modifier = modifier
@@ -87,18 +96,56 @@ fun FormularioChamadoScreen(
             Column(modifier = Modifier.padding(16.dp)) {
                 OutlinedTextField(
                     value = titulo,
-                    onValueChange = { titulo = it },
-                    label = { Text(text = "Título") },
+                    onValueChange = {
+                        titulo = it
+                        tituloTocado = true
+                    },
+                    label = { Text(text = stringResource(R.string.label_titulo)) },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    isError = mostrarErroTitulo,
+                    supportingText = if (mostrarErroTitulo) {
+                        {
+                            Text(text = stringResource(R.string.erro_titulo_obrigatorio))
+                        }
+                    } else {
+                        null
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { estado ->
+                            if (estado.hasFocus) {
+                                tituloRecebeuFoco = true
+                            } else if (tituloRecebeuFoco) {
+                                tituloTocado = true
+                            }
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = cliente,
-                    onValueChange = { cliente = it },
+                    onValueChange = {
+                        cliente = it
+                        clienteTocado = true
+                    },
                     label = { Text(text = stringResource(R.string.label_cliente)) },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    isError = mostrarErroCliente,
+                    supportingText = if (mostrarErroCliente) {
+                        {
+                            Text(text = stringResource(R.string.erro_cliente_obrigatorio))
+                        }
+                    } else {
+                        null
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { estado ->
+                            if (estado.hasFocus) {
+                                clienteRecebeuFoco = true
+                            } else if (clienteRecebeuFoco) {
+                                clienteTocado = true
+                            }
+                        }
                 )
             }
         }
@@ -177,16 +224,6 @@ fun FormularioChamadoScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (!podeSalvar) {
-            Text(
-                text = "Informe título e cliente para salvar.",
-                style = MaterialTheme.typography.bodySmall,
-                color = colorResource(R.color.text_secondary),
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
         Button(
             onClick = {
                 onSalvar(
@@ -209,9 +246,9 @@ fun FormularioChamadoScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .height(48.dp)
+                .heightIn(min = 48.dp)
         ) {
-            Text(text = "Salvar chamado")
+            Text(text = stringResource(R.string.salvar_chamado))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -243,6 +280,7 @@ private fun OpcaoChip(
                 role = Role.RadioButton,
                 onClick = onClick
             )
+            .heightIn(min = 48.dp)
             .padding(horizontal = 12.dp, vertical = 10.dp)
     ) {
         Box(

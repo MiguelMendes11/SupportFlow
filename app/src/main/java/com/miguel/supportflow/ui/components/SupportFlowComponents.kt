@@ -69,7 +69,6 @@ fun CabecalhoSuporte(
                     Text(
                         text = subtitulo,
                         style = MaterialTheme.typography.bodySmall,
-                        fontSize = 13.sp,
                         color = colorResource(R.color.text_on_navy_muted)
                     )
                 }

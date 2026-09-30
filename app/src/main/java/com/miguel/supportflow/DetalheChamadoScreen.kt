@@ -34,7 +34,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.miguel.supportflow.ui.components.CabecalhoDetalhe
 import com.miguel.supportflow.ui.components.Carregando
 import com.miguel.supportflow.ui.components.ChipPrioridade
@@ -117,7 +116,6 @@ fun DetalheChamadoScreen(
                     Text(
                         text = chamado.titulo,
                         style = MaterialTheme.typography.titleLarge,
-                        fontSize = 18.sp,
                         color = colorResource(R.color.text_heading)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -147,8 +145,6 @@ fun DetalheChamadoScreen(
                         Text(
                             text = chamado.descricao ?: stringResource(R.string.sem_descricao),
                             style = MaterialTheme.typography.bodyMedium,
-                            fontSize = 15.sp,
-                            lineHeight = 22.sp,
                             color = colorResource(R.color.text_secondary)
                         )
                     }
