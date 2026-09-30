@@ -56,6 +56,11 @@ fun ChamadosNavGraph() {
                     uiState = uiState,
                     chamadoId = chave.chamadoId,
                     onVoltarClick = { backStack.removerUltimo() },
+                    onExcluirClick = { chamado ->
+                        viewModel.excluir(chamado) {
+                            backStack.voltarParaLista()
+                        }
+                    },
                     onTentarNovamente = {
                         viewModel.recarregar()
                     }

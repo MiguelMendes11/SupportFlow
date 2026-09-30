@@ -19,4 +19,8 @@ class ChamadoRepositoryImpl(
             chamadoDao.atualizar(chamado)
         }
     }
+
+    override suspend fun excluir(chamado: Chamado) {
+        chamadoDao.excluir(chamado)
+    }
 }

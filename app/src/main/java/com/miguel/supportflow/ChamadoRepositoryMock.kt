@@ -20,4 +20,8 @@ class ChamadoRepositoryMock : ChamadoRepository {
             chamados.value + chamado
         }
     }
+
+    override suspend fun excluir(chamado: Chamado) {
+        chamados.value = chamados.value.filterNot { it.id == chamado.id }
+    }
 }

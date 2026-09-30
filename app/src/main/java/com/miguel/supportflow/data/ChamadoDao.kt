@@ -1,6 +1,7 @@
 package com.miguel.supportflow.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -22,4 +23,7 @@ interface ChamadoDao {
 
     @Update
     suspend fun atualizar(chamado: Chamado)
+
+    @Delete
+    suspend fun excluir(chamado: Chamado)
 }

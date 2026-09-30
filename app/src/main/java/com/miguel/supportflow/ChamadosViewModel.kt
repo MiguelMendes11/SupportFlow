@@ -67,6 +67,13 @@ class ChamadosViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun excluir(chamado: Chamado, aoConcluir: () -> Unit = {}) {
+        viewModelScope.launch {
+            repository.excluir(chamado)
+            aoConcluir()
+        }
+    }
+
     private companion object {
         const val TAG = "ChamadosViewModel"
     }

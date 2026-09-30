@@ -9,16 +9,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -38,12 +47,16 @@ fun DetalheChamadoScreen(
     uiState: ChamadosUiState,
     chamadoId: Int,
     onVoltarClick: () -> Unit,
+    onExcluirClick: (Chamado) -> Unit = {},
     onTentarNovamente: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val chamado = (uiState as? ChamadosUiState.Content)
         ?.chamados
         ?.find { it.id == chamadoId }
+
+    var exibindoConfirmacaoExclusao by rememberSaveable { mutableStateOf(false) }
+    var exclusaoEmAndamento by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -170,7 +183,66 @@ fun DetalheChamadoScreen(
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedButton(
+                onClick = { exibindoConfirmacaoExclusao = true },
+                enabled = !exclusaoEmAndamento,
+                shape = RoundedCornerShape(10.dp),
+                border = BorderStroke(1.dp, colorResource(R.color.prioridade_alta)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = colorResource(R.color.prioridade_alta),
+                    disabledContentColor = colorResource(R.color.text_secondary)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .heightIn(min = 48.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.excluir_chamado),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+
+    if (exibindoConfirmacaoExclusao && chamado != null) {
+        AlertDialog(
+            onDismissRequest = {
+                if (!exclusaoEmAndamento) {
+                    exibindoConfirmacaoExclusao = false
+                }
+            },
+            title = {
+                Text(text = stringResource(R.string.excluir_chamado_titulo))
+            },
+            text = {
+                Text(text = stringResource(R.string.excluir_chamado_mensagem))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (!exclusaoEmAndamento) {
+                            exclusaoEmAndamento = true
+                            exibindoConfirmacaoExclusao = false
+                            onExcluirClick(chamado)
+                        }
+                    },
+                    enabled = !exclusaoEmAndamento
+                ) {
+                    Text(text = stringResource(R.string.excluir_chamado))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { exibindoConfirmacaoExclusao = false },
+                    enabled = !exclusaoEmAndamento
+                ) {
+                    Text(text = stringResource(R.string.cancelar))
+                }
+            }
+        )
     }
 }
 

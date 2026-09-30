@@ -17,4 +17,8 @@
     <string name="tentar_novoamente">Tentar novamente</string>
     <string name="cd_carregando">Carregando chamados</string>
     <string name="detalhe_nao_encontrado">Chamado não encontrado</string>
+    <string name="excluir_chamado">Excluir chamado</string>
+    <string name="excluir_chamado_titulo">Excluir chamado?</string>
+    <string name="excluir_chamado_mensagem">Tem certeza de que deseja excluir este chamado? Esta ação não pode ser desfeita.</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
