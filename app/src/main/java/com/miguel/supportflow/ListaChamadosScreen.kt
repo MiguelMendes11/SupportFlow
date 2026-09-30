@@ -35,15 +35,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.miguel.supportflow.ui.components.CabecalhoSuporte
+import com.miguel.supportflow.ui.components.Carregando
 import com.miguel.supportflow.ui.components.ChipPrioridade
 import com.miguel.supportflow.ui.components.ChipStatus
+import com.miguel.supportflow.ui.components.EstadoErro
 import com.miguel.supportflow.ui.components.EstadoVazio
 
 @Composable
 fun ListaChamadosScreen(
-    chamados: List<Chamado>,
+    uiState: ChamadosUiState,
     onChamadoClick: (Chamado) -> Unit,
     onNovoChamadoClick: () -> Unit,
+    onTentarNovamente: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -59,22 +62,19 @@ fun ListaChamadosScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            if (chamados.isEmpty()) {
-                EstadoVazio(
-                    titulo = stringResource(R.string.lista_vazia),
-                    subtitulo = stringResource(R.string.lista_vazia_subtitulo),
+            when (uiState) {
+                ChamadosUiState.Loading -> Carregando(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .padding(horizontal = 32.dp, vertical = 24.dp)
                 )
-            } else {
-                LazyColumn(
+
+                is ChamadosUiState.Content -> LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(top = 2.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(items = chamados, key = { it.id }) { chamado ->
+                    items(items = uiState.chamados, key = { it.id }) { chamado ->
                         CartaoChamado(
                             chamado = chamado,
                             onClick = { onChamadoClick(chamado) },
@@ -84,6 +84,24 @@ fun ListaChamadosScreen(
                         )
                     }
                 }
+
+                ChamadosUiState.Empty -> EstadoVazio(
+                    titulo = stringResource(R.string.lista_vazia),
+                    subtitulo = stringResource(R.string.lista_vazia_subtitulo),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 32.dp, vertical = 24.dp)
+                )
+
+                ChamadosUiState.Error -> EstadoErro(
+                    mensagem = stringResource(R.string.erro_carregamento),
+                    aoTentarNovamente = onTentarNovamente,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 32.dp, vertical = 24.dp)
+                )
             }
         }
 

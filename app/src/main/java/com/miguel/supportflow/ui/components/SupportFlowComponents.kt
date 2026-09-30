@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +36,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -230,6 +235,71 @@ fun EstadoVazio(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+fun Carregando(
+    modifier: Modifier = Modifier
+) {
+    val descricao = stringResource(R.string.cd_carregando)
+
+    Box(
+        modifier = modifier.semantics {
+            contentDescription = descricao
+        },
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = colorResource(R.color.brand_blue),
+            modifier = Modifier.size(40.dp)
+        )
+    }
+}
+
+@Composable
+fun EstadoErro(
+    mensagem: String,
+    aoTentarNovamente: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(72.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(colorResource(R.color.card_icon_tile_background)),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_chamado),
+                contentDescription = null,
+                modifier = Modifier.size(34.dp),
+                colorFilter = ColorFilter.tint(colorResource(R.color.brand_blue_text))
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = mensagem,
+            style = MaterialTheme.typography.titleMedium,
+            color = colorResource(R.color.text_heading),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = aoTentarNovamente,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.brand_blue),
+                contentColor = colorResource(R.color.white)
+            )
+        ) {
+            Text(text = stringResource(R.string.tentar_novoamente))
+        }
     }
 }
 

@@ -13,4 +13,8 @@
     <string name="cd_voltar">Voltar para a lista de chamados</string>
     <string name="novo_chamado">Novo chamado</string>
     <string name="lista_vazia_subtitulo">Toque no botão Novo chamado para criar o primeiro chamado.</string>
+    <string name="erro_carregamento">Não foi possível carregar os chamados.</string>
+    <string name="tentar_novoamente">Tentar novamente</string>
+    <string name="cd_carregando">Carregando chamados</string>
+    <string name="detalhe_nao_encontrado">Chamado não encontrado</string>
 </resources>

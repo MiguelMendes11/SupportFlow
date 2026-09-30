@@ -27,16 +27,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.miguel.supportflow.ui.components.CabecalhoDetalhe
+import com.miguel.supportflow.ui.components.Carregando
 import com.miguel.supportflow.ui.components.ChipPrioridade
 import com.miguel.supportflow.ui.components.ChipStatus
+import com.miguel.supportflow.ui.components.EstadoErro
 import com.miguel.supportflow.ui.components.RotuloSecao
 
 @Composable
 fun DetalheChamadoScreen(
-    chamado: Chamado?,
+    uiState: ChamadosUiState,
+    chamadoId: Int,
     onVoltarClick: () -> Unit,
+    onTentarNovamente: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val chamado = (uiState as? ChamadosUiState.Content)
+        ?.chamados
+        ?.find { it.id == chamadoId }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,9 +60,23 @@ fun DetalheChamadoScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (chamado == null) {
+        if (uiState is ChamadosUiState.Loading) {
+            Carregando(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 40.dp)
+            )
+        } else if (uiState is ChamadosUiState.Error) {
+            EstadoErro(
+                mensagem = stringResource(R.string.erro_carregamento),
+                aoTentarNovamente = onTentarNovamente,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 24.dp)
+            )
+        } else if (chamado == null) {
             Text(
-                text = "Chamado não encontrado",
+                text = stringResource(R.string.detalhe_nao_encontrado),
                 style = MaterialTheme.typography.bodyMedium,
                 color = colorResource(R.color.text_secondary),
                 textAlign = TextAlign.Center,

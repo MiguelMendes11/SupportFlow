@@ -1,8 +1,8 @@
 package com.miguel.supportflow
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -33,25 +33,32 @@ fun ChamadosNavGraph() {
         onBack = { backStack.removerUltimo() },
         entryProvider = entryProvider {
             entry<ChamadosNavKey.Lista> {
-                val chamados by viewModel.chamados.collectAsState()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 ListaChamadosScreen(
-                    chamados = chamados,
+                    uiState = uiState,
                     onChamadoClick = { chamado ->
                         backStack.add(ChamadosNavKey.Detalhe(chamado.id))
                     },
                     onNovoChamadoClick = {
                         backStack.add(ChamadosNavKey.Formulario)
+                    },
+                    onTentarNovamente = {
+                        viewModel.recarregar()
                     }
                 )
             }
 
             entry<ChamadosNavKey.Detalhe> { chave ->
-                val chamados by viewModel.chamados.collectAsState()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 DetalheChamadoScreen(
-                    chamado = chamados.find { it.id == chave.chamadoId },
-                    onVoltarClick = { backStack.removerUltimo() }
+                    uiState = uiState,
+                    chamadoId = chave.chamadoId,
+                    onVoltarClick = { backStack.removerUltimo() },
+                    onTentarNovamente = {
+                        viewModel.recarregar()
+                    }
                 )
             }
 
